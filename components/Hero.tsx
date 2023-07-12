@@ -11,8 +11,8 @@ function Hero({}: Props) {
   const [text, count] = useTypewriter({
     words: [
       "Hi, my Name is Lucas",
-      "Welcome to my Portfolio",
-      "Enjoy your stay!",
+      "Welcome to my Portfolio.tsx",
+      "<!Enjoy your stay! />",
     ],
     loop: true,
     delaySpeed: 2000,
@@ -23,9 +23,9 @@ function Hero({}: Props) {
       <img
         className="relative rounded-full h-32 w-32 mx-auto object-cover"
         src="https://photos.google.com/photo/AF1QipOFe183972dx8LJyig-pWv8ycUPb_OJmXVgmZJ4"
-        alt=""
+        alt="" 
       />
-      <div>
+      <div className="z-20">
         <h2 className="text-sm uppercase text-gray-500 pb-2 tracking-[15px]">
           Software Engineer
         </h2>
