@@ -3,10 +3,13 @@ import React from "react";
 import { SocialIcon } from "react-social-icons";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { Social } from "@/typings";
 
-type Props = {};
+type Props = {
+  socials: Social[];
+};
 
-function Header() {
+function Header({socials}: Props) {
   return (
     <header className="sticky top-0 p-5 flex justify-between max-w-7xl mx-auto z-20 items-center">
       <motion.div
@@ -25,21 +28,14 @@ function Header() {
         }}
         className="flex flex-row items-center"
       >
+        {socials.map((social) => (
         <SocialIcon
-          url="https://youtube.com/"
+        key={social._id}
+          url={social.url}
           fgColor="gray"
           bgColor="transparent"
         />
-        <SocialIcon
-          url="https://youtube.com/"
-          fgColor="gray"
-          bgColor="transparent"
-        />
-        <SocialIcon
-          url="https://youtube.com/"
-          fgColor="gray"
-          bgColor="transparent"
-        />
+        ))}
       </motion.div>
 
       <motion.div
