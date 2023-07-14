@@ -32,7 +32,7 @@ function Projects({}: Props) {
               initial={{ y: -300, opacity: 0 }}
               transition={{ duration: 1.2 }}
               viewport={{ once: true }}
-              src="https://cdn.sanity.io/images/ltuexkre/production/af7ca99b5a796d0698cf9121a4a0795b5022b6be-666x375.png"
+              src=""
               alt=""
             />
             <div className="space-y-4 px-0 md:px-10 max-w-6xl">
