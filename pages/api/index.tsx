@@ -7,7 +7,7 @@ import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import ContactMe from "@/components/ContactMe";
 import Link from "next/link";
-import { GetStaticProps } from "next";
+import type { GetStaticProps } from "next";
 import { Experience, PageInfo, Skill, Project, Social } from "@/typings";
 import { fetchPageInfo } from "@/utils/fetchPageInfo";
 import { fetchExperiences } from "@/utils/fetchExperiences";
@@ -23,7 +23,7 @@ type Props = {
     socials: Social[];
 }
 
-const Home = ({pageInfo, experiences, projects, skills, socials}: Props) => {
+const Home = ({ pageInfo, experiences, skills, projects, socials }: Props) => {
   return (
     <div
       className="bg-[rgb(36,36,36)] text-white h-screen snap-y snap-mandatory overflow-y-scroll overflow-x-hidden z-0
@@ -32,12 +32,12 @@ const Home = ({pageInfo, experiences, projects, skills, socials}: Props) => {
       <Head>
         <title>Lucas' Portfolio</title>
       </Head>
-      <Header socials={socials}/>
+      <Header socials={socials} />
       <section id="hero" className="snap-center">
-        <Hero />
+        <Hero pageInfo={pageInfo}/>
       </section>
       <section id="about" className="snap-center">
-        <About />
+        <About pageInfo={pageInfo}/>
       </section>
       <section id="experience" className="snap-center">
         <WorkExperience />
@@ -64,7 +64,7 @@ const Home = ({pageInfo, experiences, projects, skills, socials}: Props) => {
       </Link>
     </div>
   );
-}
+};
 
   export default Home;
 
@@ -81,10 +81,10 @@ const Home = ({pageInfo, experiences, projects, skills, socials}: Props) => {
             experiences,
             skills, 
             projects,
-            socials
+            socials,
         },
 
-        // revalidate: 100,
+        revalidate: 10,
     }
   }
 

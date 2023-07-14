@@ -7,7 +7,7 @@ import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import ContactMe from "@/components/ContactMe";
 import Link from "next/link";
-import { GetStaticProps } from "next";
+import type { GetStaticProps } from "next";
 import { Experience, PageInfo, Skill, Project, Social } from "@/typings";
 import { fetchPageInfo } from "@/utils/fetchPageInfo";
 import { fetchExperiences } from "@/utils/fetchExperiences";
@@ -34,10 +34,10 @@ const Home = ({ pageInfo, experiences, skills, projects, socials }: Props) => {
       </Head>
       <Header socials={socials} />
       <section id="hero" className="snap-center">
-        <Hero />
+        <Hero pageInfo={pageInfo}/>
       </section>
       <section id="about" className="snap-center">
-        <About />
+        <About pageInfo={pageInfo}/>
       </section>
       <section id="experience" className="snap-center">
         <WorkExperience />

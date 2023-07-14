@@ -2,9 +2,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { PageInfo } from "@/typings";
+import { urlFor } from "@/sanity";
 
-type Props = {};
-function About({}: Props) {
+type Props = {
+  pageInfo: PageInfo
+};
+function About({pageInfo}: Props) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -27,7 +31,7 @@ function About({}: Props) {
         }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
-        src=""
+        src={urlFor(pageInfo?.profilePic).url()}
         className="-mb-20 md:mb-0 flex-shrink-0 w-56 h-56 rounded-full object-cover md:rounded-lg md:w-64 md:h-95 xl:w-[500px] xl:h-[600px]"
       />
 
@@ -38,10 +42,7 @@ function About({}: Props) {
           background
         </h4>
         <p className="text-base">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
-          eveniet, error eaque debitis adipisci sed expedita, tempore
-          consequatur quisquam nisi, laborum velit reiciendis veniam. At
-          voluptas corrupti distinctio natus labore.
+          {pageInfo?.backgroundInformation}
         </p>
       </div>
     </motion.div>
