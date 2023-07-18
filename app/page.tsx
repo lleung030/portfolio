@@ -7,15 +7,9 @@ import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import ContactMe from "@/components/ContactMe";
 import Link from "next/link";
-import type { GetStaticProps } from "next";
 import { Experience, PageInfo, Skill, Project, Social } from "@/typings";
-import { fetchPageInfo } from "@/utils/fetchPageInfo";
-import { fetchExperiences } from "@/utils/fetchExperiences";
-import { fetchSkills } from "@/utils/fetchSkills";
-import { fetchProjects } from "@/utils/fetchProjects";
-import { fetchSocial } from "@/utils/fetchSocials";
-import React, { useState, useEffect } from 'react';
-import { AppProps } from 'next/app';
+import React from 'react';
+
 
 type Props = {
     pageInfo: PageInfo;
@@ -32,7 +26,7 @@ const Home = ({ pageInfo, experiences, skills, projects, socials }: Props) => {
     scrollbar scrollbar-track-gray-400/20 scrollbar-thumb-[#F7AB0A]/80"
     >
       <Head>
-        <title>Lucas' Portfolio</title>
+        <title>{pageInfo?.name} Portfolio</title>
       </Head>
       <Header socials={socials} />
       <section id="hero" className="snap-center">
@@ -69,25 +63,4 @@ const Home = ({ pageInfo, experiences, skills, projects, socials }: Props) => {
 };
 
   export default Home;
-
-  // export const getInitialProps: GetStaticProps<Props> = async () => {
-  //   const pageInfo: PageInfo = await fetchPageInfo();
-  //   const experiences: Experience[] = await fetchExperiences();
-  //   const skills: Skill[] = await fetchSkills();
-  //   const projects: Project[] = await fetchProjects();
-  //   const socials: Social[] = await fetchSocial();
-
-  //   return {
-  //       props: {
-  //           pageInfo,
-  //           experiences,
-  //           skills, 
-  //           projects,
-  //           socials,
-  //       },
-
-  //       revalidate: 10,
-    // }
-  // }
-
 
