@@ -1,22 +1,62 @@
 "use client";
-
-import React from "react";
+import { sanityClient } from "@/sanity";
+import { useEffect, useState } from "react";
+import { groq } from "next-sanity";
 import { motion } from "framer-motion";
-import { Project } from "@/typings";
+// import { Project } from "@/typings";
 import { urlFor } from "@/sanity";
+import { Technology } from "@/typings";
 
 type Props = {
   projects: Project[];
 };
 
+interface Project {
+  _createdAt: string;
+  _id: string;
+  _rev: string;
+  _updatedAt: string;
+  title: string;
+  _type: "project";
+  image: {
+    src: string;
+    alt: string;
+  };
+  linkToBuild: string;
+  summary: string;
+  technologies: Technology[];
+}
+
 function Projects({ projects }: Props) {
+  const [data, setData] = useState<Project[]>([]);
+  const [fetchedData, setFetchedData] = useState<Project[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = groq`
+    *[_type == "project"] {
+        ...,
+        technologies[]->
+    }
+`;
+      const fetchedData = await sanityClient.fetch(query);
+      setFetchedData(fetchedData);
+      (fetchedData.map((project, i) => (
+        project.image.asset._ref
+      )));
+      console.log(fetchedData)
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 1.5 }}
       className="h-screen relative flex overflow-hidden flex-col text-left md:flex-row
-    max-w-full justify-evenly mx-auto items-center z-0"
+      max-w-full justify-evenly mx-auto items-center z-0"
     >
       <h3 className="absolute top-24 uppercase tracking-[20px] text-gray-500 text-2xl">
         Projects
@@ -24,18 +64,21 @@ function Projects({ projects }: Props) {
 
       <div
         className="relative w-full flex overflow-x-scroll overflow-y-hidden snap-x
-    snap-mandatory z-20 scrollbar scrollbar-track-gray-400/20 scrollbar-thumb-[#F7AB0A]/80"
+      snap-mandatory z-20 scrollbar scrollbar-track-gray-400/20 scrollbar-thumb-[#F7AB0A]/80"
       >
         {projects?.map((project, i) => (
           <div
             className="w-screen flex-shrink-0 snap-center flex flex-col space-y-5
-          items-center justify-center p-20 md:p-44 h-screen"
+            items-center justify-center p-20 md:p-44 h-screen"
           >
             <motion.img
               initial={{ y: -300, opacity: 0 }}
               transition={{ duration: 1.2 }}
               viewport={{ once: true }}
-              src={urlFor(project?.image).url()}
+              // src={urlFor(project?.image).url()}
+              // src={fetchedData.map((project, i) =>(
+              //   project.image.asset._ref
+              // ))}
               alt=""
             />
             <div className="space-y-4 px-0 md:px-10 max-w-6xl">

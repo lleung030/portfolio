@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'default',
   title: 'project',
 
-  projectId: 'nwqqmv4v',
+  projectId: 'cmmr35q9',
   dataset: 'production',
 
   plugins: [deskTool(), visionTool()],

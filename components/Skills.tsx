@@ -1,14 +1,54 @@
 "use client";
-
+import { sanityClient } from "@/sanity";
+import { useEffect, useState } from "react";
+import { groq } from "next-sanity";
 import React from "react";
 import { motion } from "framer-motion";
 import { Skill as SkillType } from "@/typings";
-import Skill from "./Skill";
+import Skillset from "./Skill";
+import imageUrlBuilder from "@sanity/image-url";
 
 type Props = {
   skills: SkillType[];
 };
+
+interface Skill {
+  _createdAt: string;
+  _id: string;
+  _rev: string;
+  _updatedAt: string;
+  _type: "skill";
+  image: {
+    src: string;
+    alt: string;
+  };
+  progress: number;
+  title: string;
+}
+
 function Skills({ skills }: Props) {
+  const [data, setData] = useState<Skill[]>([]);
+  const [fetchedData, setFetchedData] = useState<Skill[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = groq`
+    *[_type == "skill"] 
+`;
+      const fetchedData = await sanityClient.fetch(query);
+      setFetchedData(fetchedData);
+      // fetchedData.map((skill) => console.log(skill));
+    };
+
+    fetchData();
+  }, []);
+
+  // Function to build the image URL
+  const builder = imageUrlBuilder(sanityClient);
+  const imageUrl = (image: { asset: { _ref: string } }) => {
+    return builder.image(image).url();
+  };
+
   return (
     <motion.div
       initial={{
@@ -23,16 +63,20 @@ function Skills({ skills }: Props) {
         Skills
       </h3>
       <h3 className="absolute top-36 uppercase tracking-[3px] text-gray-500 text-sm">
-        Hover over a skill for currency proficiency
+        Hover over a skill for current proficiency
       </h3>
 
       <div className="grid grid-cols-4 gap-5">
-        {skills?.slice(0, skills.length / 2).map((skill) => (
-          <Skill key={skill._id} skill={skill} />
+        {/* {skills?.slice(0, skills.length / 2).map((skill) => (
+          <Skillset key={skill._id} skill={skill} />
         ))}
 
         {skills?.slice(skills.length / 2, skills.length).map((skill) => (
-          <Skill key={skill._id} skill={skill} directionLeft/>
+          <Skillset key={skill._id} skill={skill} directionLeft/>
+        ))} */}
+        {fetchedData.map((skill) => (
+          <Skillset key={skill._id} skill={skill}          
+          />
         ))}
       </div>
     </motion.div>

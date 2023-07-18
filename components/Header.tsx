@@ -1,15 +1,41 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SocialIcon } from "react-social-icons";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Social } from "@/typings";
+// import { Social } from "@/typings";
+import { sanityClient } from "@/sanity";
+import { groq } from "next-sanity";
 
 type Props = {
   socials: Social[];
 };
 
+interface Social {
+  _createdAt: string;
+  _id: string;
+  _rev: string;
+  _updatedAt: string;
+  _type: "social";
+  title: string;
+  url: string;
+}
+
 function Header({socials}: Props) {
+  const [data, setData] = useState<Social[]>([]);
+  const [fetchedData, setFetchedData] = useState<Social[]>([]);
+  
+  useEffect(() => {
+  const fetchData = async () => {
+    // Fetch data from Sanity
+    const query = '*[_type == "social"]';
+    const fetchedData = await sanityClient.fetch(query);
+    setFetchedData(fetchedData);
+  };
+
+  fetchData();
+}, []);
+
   return (
     <header className="sticky top-0 p-5 flex justify-between max-w-7xl mx-auto z-20 items-center">
       <motion.div
@@ -28,7 +54,7 @@ function Header({socials}: Props) {
         }}
         className="flex flex-row items-center"
       >
-        {socials.map((social) => (
+        {fetchedData.map((social) => (
         <SocialIcon
         key={social._id}
           url={social.url}
