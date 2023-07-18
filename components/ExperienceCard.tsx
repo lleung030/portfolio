@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Key, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { sanityClient, urlFor } from "@/sanity";
 import { groq } from "next-sanity";
@@ -28,6 +28,7 @@ interface Experience {
 }
 
 interface Technology {
+  _id: Key | null | undefined;
   _type: "skill";
   image: {
     src: string;
