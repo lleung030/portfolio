@@ -74,7 +74,6 @@ function Skillset({ skill, directionLeft }: Props) {
 `;
       const fetchedData = await sanityClient.fetch(query);
       setFetchedData(fetchedData);
-      console.log(fetchedData)
     };
 
     fetchData();

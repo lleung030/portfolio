@@ -1,13 +1,60 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Experience } from "@/typings";
-import { urlFor } from "@/sanity";
+import { sanityClient, urlFor } from "@/sanity";
+import { groq } from "next-sanity";
 type Props = {
   experience: Experience;
 };
+
+interface Experience {
+  _createdAt: string;
+  _id: string;
+  _rev: string;
+  _updatedAt: string;
+  _type: "experience";
+  company: string;
+  companyImage: {
+    src: string;
+    alt: string;
+  };
+  dateStarted: Date;
+  dateEnded: Date;
+  isCurrentlyWorkingHere: boolean;
+  jobTitle: string;
+  points: string[];
+  technologies: Technology[];
+}
+
+interface Technology {
+  _type: "skill";
+  image: {
+    src: string;
+    alt: string;
+  };
+  progress: number;
+  title: string;
+}
+
 function ExperienceCard({ experience }: Props) {
+  const [data, setData] = useState([]);
+  const [fetchedData, setFetchedData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = groq`
+      *[_type == "experience"] {
+        ...,
+        technologies[]->
+    }
+`;
+      const fetchedData = await sanityClient.fetch(query);
+      setFetchedData(fetchedData);
+    };
+
+    fetchData();
+  }, []);
   return (
     <article
       className="flex flex-col rounded-lg items-center space-y-7 flex-shrink-0
@@ -48,9 +95,9 @@ function ExperienceCard({ experience }: Props) {
             : new Date(experience.dateEnded).toDateString()}
         </p>
         <ul className="list-disc space-y-4 ml-5 text-lg max-h-96 pr-5 overflow-y-scroll scrollbar-thin scrollbar-track-black scrollbar-thumb-[#F7AB0A]/80">
-          {experience.points.map((point, i) => (
+          {/* {fetchedData.points.map((point, i) => (
             <li key={i}>{point}</li>
-          ))}
+          ))} */}
         </ul>
       </div>
     </article>

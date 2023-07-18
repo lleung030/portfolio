@@ -1,13 +1,63 @@
-'use client';
+"use client";
 
-import React from 'react'
-import { motion } from 'framer-motion';
-import ExperienceCard from './ExperienceCard';
-import { Experience } from '@/typings';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import ExperienceCard from "./ExperienceCard";
+import { groq } from "next-sanity";
+import { sanityClient } from "@/sanity";
+
 type Props = {
   experiences: Experience[];
+};
+
+interface Experience {
+  _createdAt: string;
+  _id: string;
+  _rev: string;
+  _updatedAt: string;
+  _type: "experience";
+  company: string;
+  companyImage: {
+    src: string;
+    alt: string;
+  };
+  dateStarted: Date;
+  dateEnded: Date;
+  isCurrentlyWorkingHere: boolean;
+  jobTitle: string;
+  points: string[];
+  technologies: Technology[];
 }
-function WorkExperience({experiences}: Props) {
+
+interface Technology {
+  _type: "skill";
+  image: {
+    src: string;
+    alt: string;
+  };
+  progress: number;
+  title: string;
+}
+
+function WorkExperience({ experiences }: Props) {
+  const [data, setData] = useState<Experience[]>([]);
+  const [fetchedData, setFetchedData] = useState<Experience[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const query = groq`
+      *[_type == "experience"] {
+          ...,
+          technologies[]->
+      }
+`;
+      const fetchedData = await sanityClient.fetch(query);
+      setFetchedData(fetchedData);
+      // fetchedData.map((skill) => console.log(skill));
+    };
+
+    fetchData();
+  }, []);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -22,12 +72,12 @@ function WorkExperience({experiences}: Props) {
         className="w-full flex space-x-5 overflow-x-scroll p-10 snap-x snap-mandatory
       scrollbar scrollbar-track-gray-400/20 scrollbar-thumb-[#F7AB0A]/80"
       >
-        {/* {experiences.map((experience) => (
+        {fetchedData.map((experience) => (
           <ExperienceCard key={experience._id} experience={experience} />
-        ))} */}
+        ))}
       </div>
     </motion.div>
   );
 }
 
-export default WorkExperience
+export default WorkExperience;
